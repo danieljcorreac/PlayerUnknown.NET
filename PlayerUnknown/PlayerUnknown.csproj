@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D5C4B791-E097-43C6-8921-048C3E1B7170}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PlayerUnknown</RootNamespace>
+    <AssemblyName>PlayerUnknown</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Builds\Debug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>1</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Builds\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Gameloop.Vdf, Version=0.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gameloop.Vdf.0.4.4\lib\net45\Gameloop.Vdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Gameloop.Vdf.JsonConverter, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gameloop.Vdf.JsonConverter.0.1.1\lib\net45\Gameloop.Vdf.JsonConverter.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Native\Enums\WindowStates.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventHandlers.cs" />
+    <Compile Include="Events\Handlers\PubgAttachedEvent.cs" />
+    <Compile Include="Events\Handlers\PubgDetachedEvent.cs" />
+    <Compile Include="Events\Handlers\Weapon\WeaponChangedEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsMaximizedEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsMinimizedEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsNotOnScreenEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsOnScreenEvent.cs" />
+    <Compile Include="Exceptions\PubgMessageException.cs" />
+    <Compile Include="Exceptions\PubgSessionException.cs" />
+    <Compile Include="Exceptions\ProcessNotFoundException.cs" />
+    <None Include="app.config" />
+    <Compile Include="Helpers\Comparers\PathEndingComparer.cs" />
+    <Compile Include="Helpers\Memory.cs" />
+    <Compile Include="Helpers\SteamHelper.cs" />
+    <Compile Include="Helpers\Win32.cs" />
+    <Compile Include="Logging.cs" />
+    <Compile Include="Helpers\Padding.cs" />
+    <Compile Include="Logic\Weapon.cs" />
+    <Compile Include="Logic\Weapons\TommyGun.cs" />
+    <Compile Include="Logic\Weapons\Ak47.cs" />
+    <Compile Include="Mouse.cs" />
+    <Compile Include="Native\Point.cs" />
+    <Compile Include="Native\Rectangle.cs" />
+    <Compile Include="Native\WindowPlacement.cs" />
+    <Compile Include="PUBG.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Events\Hooks\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
