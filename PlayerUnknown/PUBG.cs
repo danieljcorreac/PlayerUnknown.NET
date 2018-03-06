@@ -1,10 +1,12 @@
 ﻿namespace PlayerUnknown
 {
+    using System;
     using System.Diagnostics;
     using System.Threading.Tasks;
 
     using PlayerUnknown.Exceptions;
     using PlayerUnknown.Helpers;
+    using PlayerUnknown.Native;
     using PlayerUnknown.Native.Enums;
 
     public static class PUBG
@@ -160,6 +162,38 @@
                 }
 
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="PUBG"/> window properties.
+        /// </summary>
+        public static WindowPlacement Window
+        {
+            get
+            {
+                if (PUBG.AttachedProcess != null)
+                {
+                    return Win32.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
+                }
+
+                return new WindowPlacement();
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="PUBG"/> window properties.
+        /// </summary>
+        public static Rectangle WindowRec
+        {
+            get
+            {
+                if (PUBG.AttachedProcess != null)
+                {
+                    return Win32.GetWindowRectangle(PUBG._AttachedProcess.MainWindowHandle);
+                }
+
+                return new Rectangle();
             }
         }
 

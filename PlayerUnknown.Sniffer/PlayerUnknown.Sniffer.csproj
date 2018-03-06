@@ -39,6 +39,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ayx.BitIO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ayx.BitIO.1.0.0\lib\net20\Ayx.BitIO.dll</HintPath>
+    </Reference>
     <Reference Include="PacketDotNet, Version=0.16.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PacketDotNet.0.16.0\lib\PacketDotNet.dll</HintPath>
     </Reference>
@@ -50,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PubgPacket.cs" />
+    <Compile Include="PubgReader.cs" />
     <Compile Include="PubgSniffer.cs" />
   </ItemGroup>
   <ItemGroup>

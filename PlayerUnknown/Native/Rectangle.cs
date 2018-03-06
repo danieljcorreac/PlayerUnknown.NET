@@ -1,5 +1,6 @@
 ﻿namespace PlayerUnknown.Native
 {
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -61,11 +62,17 @@
         }
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        /// Clones the rectangle.
         /// </summary>
-        public override string ToString()
+        public Rectangle CloneRectangle()
         {
-            return string.Format("Left = {0} Top = {1} Height = {2} Width = {3}", this.Left, this.Top, this.Height, this.Width);
+            return new Rectangle
+            {
+                Left    = this.Left,
+                Right   = this.Right,
+                Top     = this.Top,
+                Bottom  = this.Bottom
+            };
         }
     }
 }

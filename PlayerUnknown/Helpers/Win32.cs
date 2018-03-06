@@ -38,5 +38,19 @@
 
             return Placement;
         }
+
+        /// <summary>
+        /// Gets the window rectangle using the specified handle.
+        /// </summary>
+        /// <param name="Handle">The handle.</param>
+        public static Rectangle GetWindowRectangle(IntPtr Handle)
+        {
+            if (GetWindowRect(Handle, out Rectangle Rectangle) == 0)
+            {
+                return Rectangle;
+            }
+
+            return Rectangle;
+        }
     }
 }

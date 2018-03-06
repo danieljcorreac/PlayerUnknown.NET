@@ -1,13 +1,20 @@
 ﻿namespace PlayerUnknown.Sniffer
 {
     using System;
-    using System.Threading;
+
+    using PacketDotNet;
 
     using SharpPcap;
     using SharpPcap.WinPcap;
 
     public class PubgSniffer
     {
+        public EventHandler<PubgPacket> OnPacketCaptured
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets the device used to sniff packets.
         /// </summary>
@@ -16,8 +23,6 @@
             get;
             set;
         }
-
-        private long PacketCaptured;
 
         /// <summary>
         /// Initializes this instance.
@@ -91,17 +96,22 @@
         /// <param name="Args">The <see cref="CaptureEventArgs"/> instance containing the event data.</param>
         private void OnPacketSniffed(object Sender, CaptureEventArgs Args)
         {
-            if (BitConverter.ToString(Args.Packet.Data).StartsWith("00-24-D4-B0-6B-10-6C-FD-B9-94-EF-E4-08"))
+            var UdpPacket = Packet.ParsePacket(Args.Packet.LinkLayerType, Args.Packet.Data);
+
+            if (UdpPacket == null)
             {
                 return;
             }
 
-            if (Interlocked.Increment(ref this.PacketCaptured) > 10) // Log Limit
+            while (UdpPacket.PayloadPacket != null)
             {
-                return;
+                UdpPacket = UdpPacket.PayloadPacket;
             }
 
-            Logging.Info(this.GetType(), "[" + Args.Packet.Data.Length + "]" + " " + BitConverter.ToString(Args.Packet.Data));
+            if (this.OnPacketCaptured != null)
+            {
+                this.OnPacketCaptured.Invoke(null, PubgPacket.FromBuffer(UdpPacket.PayloadData));
+            }
         }
 
         /// <summary>

@@ -1,78 +1,28 @@
 ﻿namespace PlayerUnknown.Leaker
 {
-    using System;
-
-    using PlayerUnknown.Leaker.Imports;
-    using PlayerUnknown.Leaker.Proc;
-    using PlayerUnknown.Leaker.Service;
-
-    internal static class Program
+    public static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Defines the entry point of the application.
         /// </summary>
-        [STAThread]
-        private static void Main()
+        public static void Main(string[] Args)
         {
-            CProcess CurrentProcess    = new CProcess();
-            CProcess TargetProcess     = new CProcess(Options.TargetProcess);
+            string Source = "";
+            string Target = "TslGame";
 
-            Logging.Info(typeof(Program), "Leaker has been configured.");
-
-            CurrentProcess.SetPrivilege("SeDebugPrivilege", true);
-            CurrentProcess.SetPrivilege("SeTcbPrivilege", true);
-
-            Logging.Info(typeof(Program), "Waiting for a few seconds..");
-
-            TargetProcess.Wait(Options.DelayToWait);
-
-            Logging.Info(typeof(Program), "Resuming..");
-
-            if (TargetProcess.IsValidProcess())
+            if (Args.Length > 0)
             {
-                Logging.Info(typeof(Program), "The target process is valid.");
+                Source = Args[0];
 
-                var Handles = Service.Service.ServiceEnumHandles(TargetProcess.GetPid(), Options.DesiredAccess);
-
-                Logging.Info(typeof(Program), "We've detected " + Handles.Count + " processes : ");
-                
-                foreach (HandleInfo HandleInfo in Handles)
+                if (Args.Length > 1)
                 {
-                    Logging.Info(typeof(Program), " - " + HandleInfo.Pid + ".");
-                    
-                    if (HandleInfo.Pid == Kernel32.GetCurrentProcessId())
-                    {
-                        Logging.Info(typeof(Program), "The detected process was PlayerUnknown.Leaker");
-                        continue;
-                    }
-
-                    var ServProcess = new CProcess(HandleInfo.Pid);
-
-                    IntPtr HProcess;
-
-                    if (Service.Service.ServiceSetHandleStatus(ServProcess, HandleInfo.HProcess, true, true))
-                    {
-                        // TODO : Bypass Windows 10 'CloseCheck' Security
-
-                        // HProcess = Service.Service.ServiceStartProcess(null, Directory.GetCurrentDirectory() + "\\" + Options.YourProcess + " " + HandleInfo.HProcess, null, true, ServProcess.GetHandle());
-                        // Service.Service.ServiceSetHandleStatus(ServProcess, HandleInfo.HProcess, false, false);
-                        // Kernel32.CloseHandle(HProcess);
-                    }
-
-                    // ServProcess.Close();
+                    Target = Args[1];
                 }
-
-                // TargetProcess.Close();
-            }
-            else
-            {
-                Logging.Warning(typeof(Program), "The target process is not valid.");
             }
 
-            CurrentProcess.SetPrivilege("SeDebugPrivilege", false);
-            CurrentProcess.SetPrivilege("SeTcbPrivilege", false);
+            FuckBattlEye.Run(Source, Target);
 
-            Console.ReadKey(false);
+            System.Console.ReadKey(false);
         }
     }
 }

@@ -49,6 +49,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PlayerUnknown.Leaker\PlayerUnknown.Leaker.csproj">
+      <Project>{53939C7A-A5DD-451F-A743-C91A188A3B0F}</Project>
+      <Name>PlayerUnknown.Leaker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PlayerUnknown.Sniffer\PlayerUnknown.Sniffer.csproj">
       <Project>{DE7821C0-D0D1-40FA-BC2D-F498C4A049A0}</Project>
       <Name>PlayerUnknown.Sniffer</Name>
@@ -57,6 +61,9 @@
       <Project>{d5c4b791-e097-43c6-8921-048c3e1b7170}</Project>
       <Name>PlayerUnknown</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
