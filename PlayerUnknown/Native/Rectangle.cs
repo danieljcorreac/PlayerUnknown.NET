@@ -1,6 +1,5 @@
 ﻿namespace PlayerUnknown.Native
 {
-    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
     /// <summary>

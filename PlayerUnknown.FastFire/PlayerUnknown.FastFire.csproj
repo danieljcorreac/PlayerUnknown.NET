@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AD453E14-3AD2-4E66-89E7-650A20B05E47}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>PlayerUnknown.Test</RootNamespace>
-    <AssemblyName>PlayerUnknown.Test</AssemblyName>
+    <ProjectGuid>{D0F79786-E104-4122-B044-996836D3FCB2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>PlayerUnknown.FastFire</RootNamespace>
+    <AssemblyName>PlayerUnknown.FastFire</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>1</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <FileAlignment>512</FileAlignment>
-    <LangVersion>default</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,11 +33,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>0</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <FileAlignment>512</FileAlignment>
-    <LangVersion>default</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>PlayerUnknown.Test.Program</StartupObject>
+    <StartupObject>PlayerUnknown.FastFire.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,16 +47,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PlayerUnknown.Leaker\PlayerUnknown.Leaker.csproj">
-      <Project>{53939C7A-A5DD-451F-A743-C91A188A3B0F}</Project>
-      <Name>PlayerUnknown.Leaker</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PlayerUnknown.Sniffer\PlayerUnknown.Sniffer.csproj">
-      <Project>{DE7821C0-D0D1-40FA-BC2D-F498C4A049A0}</Project>
-      <Name>PlayerUnknown.Sniffer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PlayerUnknown\PlayerUnknown.csproj">
-      <Project>{d5c4b791-e097-43c6-8921-048c3e1b7170}</Project>
+      <Project>{D5C4B791-E097-43C6-8921-048C3E1B7170}</Project>
       <Name>PlayerUnknown</Name>
     </ProjectReference>
   </ItemGroup>

@@ -75,5 +75,13 @@
         {
             mouse_event((int) MouseEventFlags.Move, DiffX, DiffY, 0, 0);
         }
+
+        /// <summary>
+        /// Clicks this instance.
+        /// </summary>
+        public static void Click()
+        {
+            mouse_event((int) (MouseEventFlags.LeftDown), 0, 0, 0, 0);
+        }
     }
 }

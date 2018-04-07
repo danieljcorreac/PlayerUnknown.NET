@@ -1,11 +1,9 @@
 ﻿namespace PlayerUnknown
 {
-    using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Threading.Tasks;
+    using System.Linq;
 
-    using PlayerUnknown.Exceptions;
-    using PlayerUnknown.Helpers;
     using PlayerUnknown.Native;
     using PlayerUnknown.Native.Enums;
 
@@ -197,6 +195,38 @@
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="PUBG"/> modules properties.
+        /// </summary>
+        public static List<ProcessModule> Modules
+        {
+            get
+            {
+                if (PUBG.AttachedProcess != null)
+                {
+                    return PUBG._AttachedProcess.Modules.Cast<ProcessModule>().ToList();
+                }
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="PUBG"/> main module propertie.
+        /// </summary>
+        public static ProcessModule MainModule
+        {
+            get
+            {
+                if (PUBG.AttachedProcess != null)
+                {
+                    return PUBG._AttachedProcess.MainModule;
+                }
+
+                return null;
+            }
+        }
+
         private static Process _AttachedProcess;
 
         /// <summary>
@@ -208,6 +238,8 @@
             {
                 return;
             }
+
+            // TODO
 
             PUBG.Initialized = true;
         }
@@ -265,7 +297,7 @@
         /// </summary>
         public static void EnableEvents()
         {
-            Events.EventHandlers.Run().Wait(500);
+            Events.EventHandlers.Run().ConfigureAwait(false);
         }
     }
 }

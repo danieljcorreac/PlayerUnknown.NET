@@ -4,6 +4,21 @@
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Threading.Tasks;
+
+    using PlayerUnknown.Native;
+
+    public static class M
+    {
+        public static Memory Memory;
+
+        public static T Read<T>(IntPtr Address) where T : struct                => Memory.Read<T>(Address);
+        public static byte[] Read(IntPtr address, int nLength)                  => Memory.Read(address, nLength);
+        public static void Write<T>(T value, IntPtr Address) where T : struct   => Memory.Write(value, Address);
+        public static void Write(byte[] value, IntPtr Address)                  => Memory.WriteMemory(value, Address);
+        public static string ReadString(IntPtr address)                         => Memory.ReadString(address);
+        public static void WriteString(string value, IntPtr address)            => Memory.WriteMemory(Encoding.Default.GetBytes(value), address);
+    }
 
     public class Memory
     {
@@ -21,6 +36,7 @@
         public IntPtr Base
         {
             get;
+            set;
         }
 
         /// <summary>
@@ -32,6 +48,8 @@
         {
             this.Handle = Handle;
             this.Base   = Base;
+
+            M.Memory    = this;
         }
 
         /// <summary>
@@ -100,7 +118,7 @@
         public byte[] Read(IntPtr Address, int Length)
         {
             byte[] TempData = new byte[Length];
-            bool result = Win32.ReadProcessMemory(this.Handle, Address, TempData, Length, 0);
+            bool result = Win32.ReadProcessMemory(this.Handle, (IntPtr) (Base.ToInt64() + Address.ToInt64()), TempData, Length, 0);
             return TempData;
         }
 
@@ -127,6 +145,34 @@
         public void WriteMemory(byte[] Bytes, IntPtr Address)
         {
             Win32.WriteProcessMemory(this.Handle, Address, Bytes, Bytes.Length, 0);
+        }
+
+        /// <summary>
+        /// Dumps the memory.
+        /// </summary>
+        public byte[] DumpMemory(int ReadLength = 1024)
+        {
+            IntPtr ReadOffset   = IntPtr.Zero;
+
+            byte[] Dump         = new byte[0];
+            byte[] Temp         = new byte[0];
+
+            Task.Run(() =>
+            {
+                while ((Temp    = this.Read(ReadOffset, ReadLength)) != null)
+                {
+                    byte[] NewDump = new byte[Dump.Length + Temp.Length];
+
+                    Array.Copy(Dump, 0, NewDump, 0, Dump.Length);
+                    Array.Copy(Temp, 0, NewDump, Dump.Length, Temp.Length);
+
+                    IntPtr.Add(ReadOffset, ReadLength);
+
+                    Dump = NewDump;
+                }
+            }).Wait(15000);
+
+            return Dump;
         }
     }
 }

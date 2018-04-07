@@ -1,9 +1,7 @@
-﻿namespace PlayerUnknown.Helpers
+﻿namespace PlayerUnknown.Native
 {
     using System;
     using System.Runtime.InteropServices;
-
-    using PlayerUnknown.Native;
 
     public static class Win32
     {
@@ -31,7 +29,7 @@
         {
             WindowPlacement Placement = new WindowPlacement();
 
-            if (GetWindowPlacement(Handle, ref Placement))
+            if (Win32.GetWindowPlacement(Handle, ref Placement))
             {
                 return Placement;
             }
@@ -45,7 +43,7 @@
         /// <param name="Handle">The handle.</param>
         public static Rectangle GetWindowRectangle(IntPtr Handle)
         {
-            if (GetWindowRect(Handle, out Rectangle Rectangle) == 0)
+            if (Win32.GetWindowRect(Handle, out Rectangle Rectangle) == 0)
             {
                 return Rectangle;
             }
