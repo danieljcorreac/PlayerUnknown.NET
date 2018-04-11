@@ -44,7 +44,7 @@
                 return false;
             }
 
-            this.Device = (WinPcapDevice) Devices[1];
+            this.Device = (WinPcapDevice) Devices[0];
 
             if (Device.Started == false)
             {

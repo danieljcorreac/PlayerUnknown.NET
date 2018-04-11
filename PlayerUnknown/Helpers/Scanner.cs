@@ -61,7 +61,7 @@
 
             g_dictStringPatterns.Clear();
 
-            return Win32.ReadProcessMemory(g_hProcess, g_lpModuleBase, g_arrModuleBuffer, SizeOfImage);
+            return Memory.ReadProcessMemory(g_hProcess, g_lpModuleBase, g_arrModuleBuffer, SizeOfImage);
         }
 
         /// <summary>
@@ -172,12 +172,6 @@
             }
 
             return patternbytes.ToArray();
-        }
-
-        private static class Win32
-        {
-            [DllImport("kernel32.dll")]
-            public static extern bool ReadProcessMemory(IntPtr hProcess, ulong lpBaseAddress, byte[] lpBuffer, uint dwSize, int lpNumberOfBytesRead = 0);
         }
     }
 }

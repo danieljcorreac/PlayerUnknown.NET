@@ -1,11 +1,13 @@
 ﻿namespace PlayerUnknown
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
 
-    using PlayerUnknown.Native;
-    using PlayerUnknown.Native.Enums;
+    using NetCoreEx.Geometry;
+
+    using WinApi.User32;
 
     public static class PUBG
     {
@@ -31,6 +33,8 @@
                     {
                         return PUBG._AttachedProcess;
                     }
+
+                    PUBG._AttachedProcess = null;
                 }
 
                 return null;
@@ -103,9 +107,9 @@
             {
                 if (PUBG.AttachedProcess != null)
                 {
-                    var Placement = Win32.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
+                    var Placement = Native.Window.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
 
-                    if (Placement.ShowCmd == WindowStates.Hide || Placement.ShowCmd == WindowStates.Minimize)
+                    if (Placement.ShowCmd == ShowWindowCommands.SW_HIDE || Placement.ShowCmd == ShowWindowCommands.SW_MINIMIZE)
                     {
                         return true;
                     }
@@ -124,9 +128,9 @@
             {
                 if (PUBG.AttachedProcess != null)
                 {
-                    var Placement = Win32.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
+                    var Placement = Native.Window.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
 
-                    if (Placement.ShowCmd == WindowStates.Maximize || Placement.ShowCmd == WindowStates.ShowMaximized)
+                    if (Placement.ShowCmd == ShowWindowCommands.SW_MAXIMIZE || Placement.ShowCmd == ShowWindowCommands.SW_SHOWMAXIMIZED)
                     {
                         return true;
                     }
@@ -145,7 +149,7 @@
             {
                 if (PUBG.AttachedProcess != null)
                 {
-                    var Placement = Win32.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
+                    var Placement = Native.Window.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
                     var Flag      = Placement.ShowCmd;
 
                     if (PUBG.IsMaximized)
@@ -153,7 +157,12 @@
                         return true;
                     }
 
-                    if (Flag == WindowStates.Restore || Flag == WindowStates.Show || Flag == WindowStates.ShowNormal || Flag == WindowStates.ShowDefault)
+                    if (PUBG.IsMinimized)
+                    {
+                        return false;
+                    }
+
+                    if (Flag == ShowWindowCommands.SW_RESTORE || Flag == ShowWindowCommands.SW_SHOW || Flag == ShowWindowCommands.SW_SHOWDEFAULT)
                     {
                         return true;
                     }
@@ -172,7 +181,7 @@
             {
                 if (PUBG.AttachedProcess != null)
                 {
-                    return Win32.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
+                    return Native.Window.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
                 }
 
                 return new WindowPlacement();
@@ -180,7 +189,7 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="PUBG"/> window properties.
+        /// Gets the <see cref="PUBG"/> window rectangle.
         /// </summary>
         public static Rectangle WindowRec
         {
@@ -188,10 +197,26 @@
             {
                 if (PUBG.AttachedProcess != null)
                 {
-                    return Win32.GetWindowRectangle(PUBG._AttachedProcess.MainWindowHandle);
+                    return Native.Window.GetWindowRectangle(PUBG._AttachedProcess.MainWindowHandle);
                 }
 
                 return new Rectangle();
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="PUBG"/> window handle.
+        /// </summary>
+        public static IntPtr WindowHandle
+        {
+            get
+            {
+                if (PUBG.AttachedProcess != null)
+                {
+                    return PUBG._AttachedProcess.MainWindowHandle;
+                }
+
+                return IntPtr.Zero;
             }
         }
 
@@ -247,9 +272,10 @@
         /// <summary>
         /// Attaches this instance to <see cref="PUBG"/>.
         /// </summary>
-        public static void Attach()
+        /// <param name="BattlEyeProtected">If it must be protected or not.</param>
+        public static void Attach(bool BattlEyeProtected = true)
         {
-            var Processes = Process.GetProcessesByName("TslGame");
+            var Processes = Process.GetProcessesByName(BattlEyeProtected ? "TslGame_BE" : "TslGame");
             var Processus = (Process) null;
 
             if (Processes.Length == 0)

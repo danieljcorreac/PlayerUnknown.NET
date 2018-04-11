@@ -1,13 +1,13 @@
 ﻿namespace PlayerUnknown.Cheats
 {
     using System;
-    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
     using Gma.System.MouseKeyHook;
 
     using PlayerUnknown.Logic;
+    using PlayerUnknown.Native;
 
     public static class NoRecoil
     {

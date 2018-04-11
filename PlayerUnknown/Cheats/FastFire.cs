@@ -1,10 +1,11 @@
 ﻿namespace PlayerUnknown.Cheats
 {
-    using System.Threading;
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
     using Gma.System.MouseKeyHook;
+
+    using PlayerUnknown.Native;
 
     public static class FastFire
     {

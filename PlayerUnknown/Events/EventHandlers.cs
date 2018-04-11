@@ -35,7 +35,7 @@
         /// <summary>
         /// Runs this instance.
         /// </summary>
-        public static async Task Run()
+        internal static async Task Run()
         {
             while (true)
             {

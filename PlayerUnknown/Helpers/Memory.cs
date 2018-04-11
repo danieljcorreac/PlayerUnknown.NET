@@ -6,20 +6,6 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    using PlayerUnknown.Native;
-
-    public static class M
-    {
-        public static Memory Memory;
-
-        public static T Read<T>(IntPtr Address) where T : struct                => Memory.Read<T>(Address);
-        public static byte[] Read(IntPtr address, int nLength)                  => Memory.Read(address, nLength);
-        public static void Write<T>(T value, IntPtr Address) where T : struct   => Memory.Write(value, Address);
-        public static void Write(byte[] value, IntPtr Address)                  => Memory.WriteMemory(value, Address);
-        public static string ReadString(IntPtr address)                         => Memory.ReadString(address);
-        public static void WriteString(string value, IntPtr address)            => Memory.WriteMemory(Encoding.Default.GetBytes(value), address);
-    }
-
     public class Memory
     {
         /// <summary>
@@ -33,7 +19,7 @@
         /// <summary>
         /// Gets the base.
         /// </summary>
-        public IntPtr Base
+        private IntPtr Base
         {
             get;
             set;
@@ -48,8 +34,6 @@
         {
             this.Handle = Handle;
             this.Base   = Base;
-
-            M.Memory    = this;
         }
 
         /// <summary>
@@ -118,7 +102,7 @@
         public byte[] Read(IntPtr Address, int Length)
         {
             byte[] TempData = new byte[Length];
-            bool result = Win32.ReadProcessMemory(this.Handle, (IntPtr) (Base.ToInt64() + Address.ToInt64()), TempData, Length, 0);
+            bool result = Memory.ReadProcessMemory(this.Handle, (IntPtr) (Base.ToInt64() + Address.ToInt64()), TempData, Length, 0);
             return TempData;
         }
 
@@ -144,24 +128,30 @@
         /// <param name="Address">The address.</param> 
         public void WriteMemory(byte[] Bytes, IntPtr Address)
         {
-            Win32.WriteProcessMemory(this.Handle, Address, Bytes, Bytes.Length, 0);
+            WriteProcessMemory(this.Handle, Address, Bytes, Bytes.Length, 0);
         }
 
         /// <summary>
         /// Dumps the memory.
         /// </summary>
-        public byte[] DumpMemory(int ReadLength = 1024)
+        public async Task<byte[]> DumpMemory(int ReadLength = 1024)
         {
             IntPtr ReadOffset   = IntPtr.Zero;
 
             byte[] Dump         = new byte[0];
-            byte[] Temp         = new byte[0];
 
-            Task.Run(() =>
+            await Task.Run(() =>
             {
-                while ((Temp    = this.Read(ReadOffset, ReadLength)) != null)
+                while (true)
                 {
-                    byte[] NewDump = new byte[Dump.Length + Temp.Length];
+                    byte[] Temp     = this.Read(ReadOffset, ReadLength);
+
+                    if (Temp == null)
+                    {
+                        break;
+                    }
+
+                    byte[] NewDump  = new byte[Dump.Length + Temp.Length];
 
                     Array.Copy(Dump, 0, NewDump, 0, Dump.Length);
                     Array.Copy(Temp, 0, NewDump, Dump.Length, Temp.Length);
@@ -170,9 +160,18 @@
 
                     Dump = NewDump;
                 }
-            }).Wait(15000);
+            });
 
             return Dump;
         }
+
+        [DllImport("kernel32.dll")]
+        public static extern bool ReadProcessMemory(IntPtr Handle, ulong Address, byte[] Buffer, uint Size, int BytesRead = 0);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool ReadProcessMemory(IntPtr Handle, IntPtr Address, byte[] Buffer, int Size, int BytesRead);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool WriteProcessMemory(IntPtr Handle, IntPtr Address, byte[] Buffer, int Size, int BytesWritten);
     }
 }
