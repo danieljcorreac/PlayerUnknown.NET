@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerUnknown.ESPMap", "Pla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerUnknown.Esp", "PlayerUnknown.Esp\PlayerUnknown.Esp.csproj", "{3CA83D95-4101-4257-BD0B-3B60FE9AE4A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerUnknown.Installer", "PlayerUnknown.Installer\PlayerUnknown.Installer.csproj", "{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,18 @@ Global
 		{3CA83D95-4101-4257-BD0B-3B60FE9AE4A9}.Release|x64.Build.0 = Release|Any CPU
 		{3CA83D95-4101-4257-BD0B-3B60FE9AE4A9}.Release|x86.ActiveCfg = Release|Any CPU
 		{3CA83D95-4101-4257-BD0B-3B60FE9AE4A9}.Release|x86.Build.0 = Release|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Debug|x64.Build.0 = Debug|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Debug|x86.Build.0 = Debug|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Release|x64.Build.0 = Release|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{4AFDF8F8-C668-4806-ADF0-E64B756BF8C7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
