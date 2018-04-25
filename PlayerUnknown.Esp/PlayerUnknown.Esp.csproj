@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>1</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,7 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>0</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>PlayerUnknown.Esp.Program</StartupObject>

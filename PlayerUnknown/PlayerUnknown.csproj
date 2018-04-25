@@ -210,6 +210,8 @@
     <Compile Include="Helpers\Comparers\PathEndingComparer.cs" />
     <Compile Include="Helpers\Memory.cs" />
     <Compile Include="Helpers\SteamHelper.cs" />
+    <Compile Include="Native\Enums\OpenPermissions.cs" />
+    <Compile Include="Native\Win32.cs" />
     <Compile Include="Native\Window.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="Helpers\Padding.cs" />

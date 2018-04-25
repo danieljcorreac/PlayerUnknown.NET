@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.InteropServices;
 
     public class Scanner
     {
@@ -56,8 +55,8 @@
         /// <param name="SizeOfImage">The size of the image.</param>
         public bool SelectModule(IntPtr hModule, uint SizeOfImage)
         {
-            g_lpModuleBase = (ulong) hModule;
-            g_arrModuleBuffer = new byte[SizeOfImage];
+            g_lpModuleBase      = (ulong) hModule;
+            g_arrModuleBuffer   = new byte[SizeOfImage];
 
             g_dictStringPatterns.Clear();
 

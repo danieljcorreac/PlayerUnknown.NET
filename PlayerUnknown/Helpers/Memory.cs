@@ -76,6 +76,32 @@
         }
 
         /// <summary>
+        /// Read process memory
+        /// </summary>
+        /// <typeparam name="T">Data Type</typeparam>
+        /// <param name="Address">Memory Address</param>
+        /// <returns></returns>
+        public T Read<T>(UIntPtr Address)
+        {
+            var size = Marshal.SizeOf(typeof(T));
+            var data = this.Read(Address, size);
+            return Memory.GetStructure<T>(data);
+        }
+        
+        /// <summary>
+        /// Read process memory
+        /// </summary>
+        /// <typeparam name="T">Data Type</typeparam>
+        /// <param name="Address">Memory Address</param>
+        /// <returns></returns>
+        public T Read<T>(ulong Address)
+        {
+            var size = Marshal.SizeOf(typeof(T));
+            var data = this.Read(Address, size);
+            return Memory.GetStructure<T>(data);
+        }
+
+        /// <summary>
         /// Write Process Memory
         /// </summary>
         /// <typeparam name="T">Data Type</typeparam>
@@ -103,6 +129,32 @@
         {
             byte[] TempData = new byte[Length];
             bool result = Memory.ReadProcessMemory(this.Handle, (IntPtr) (Base.ToInt64() + Address.ToInt64()), TempData, Length, 0);
+            return TempData;
+        }
+
+        /// <summary>
+        /// Read a chunk from memory
+        /// </summary>
+        /// <param name="Address">Address</param>
+        /// <param name="data">Data</param>
+        /// <param name="Length">Length of chunk</param>
+        public byte[] Read(UIntPtr Address, int Length)
+        {
+            byte[] TempData = new byte[Length];
+            bool result = Memory.ReadProcessMemory(this.Handle, (IntPtr) (Base.ToInt64() + (long) Address.ToUInt64()), TempData, Length, 0);
+            return TempData;
+        }
+
+        /// <summary>
+        /// Read a chunk from memory
+        /// </summary>
+        /// <param name="Address">Address</param>
+        /// <param name="data">Data</param>
+        /// <param name="Length">Length of chunk</param>
+        public byte[] Read(ulong Address, int Length)
+        {
+            byte[] TempData = new byte[Length];
+            bool result = Memory.ReadProcessMemory(this.Handle, (IntPtr) (Base.ToInt64() + (long) Address), TempData, Length, 0);
             return TempData;
         }
 
