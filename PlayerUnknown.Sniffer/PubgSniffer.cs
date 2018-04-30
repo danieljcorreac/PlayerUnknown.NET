@@ -44,7 +44,12 @@
                 return false;
             }
 
-            this.Device = (WinPcapDevice) Devices[0];
+            foreach (var Device in Devices)
+            {
+                Logging.Info(this.GetType(), "Device : " + Device.GetType().Name + ", " + Device.Name +  ".");
+            }
+
+            this.Device = (WinPcapDevice) Devices[1];
 
             if (Device.Started == false)
             {
