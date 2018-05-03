@@ -1,26 +1,57 @@
-#include <ntddk.h>
-#include <wdf.h>
+#include <ntdef.h>
+#include <ntifs.h>
+
 DRIVER_INITIALIZE DriverEntry;
-EVT_WDF_DRIVER_DEVICE_ADD KmdfHelloWorldEvtDeviceAdd;
+#pragma alloc_text(INIT, DriverEntry)
 
-NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT  DriverObject, _In_ PUNICODE_STRING RegistryPath)
+NTSTATUS NTAPI MmCopyVirtualMemory
+(
+	PEPROCESS		SourceProcess,
+	PVOID			SourceAddress,
+	PEPROCESS		TargetProcess,
+	PVOID			TargetAddress,
+	SIZE_T			BufferSize,
+	KPROCESSOR_MODE PreviousMode,
+	PSIZE_T			ReturnSize
+);
+
+NTKERNELAPI NTSTATUS PsLookupProcessByProcessId(
+	_In_		HANDLE		ProcessId,
+	_Outptr_	PEPROCESS	*Process
+);
+
+NTSTATUS DriverEntry(
+	_In_		struct _DRIVER_OBJECT	*DriverObject,
+	_In_		PUNICODE_STRING			RegistryPath
+)
 {
-	NTSTATUS status;
-	WDF_DRIVER_CONFIG config;
-
-	KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "KmdfHelloWorld: DriverEntry\n"));
-	WDF_DRIVER_CONFIG_INIT(&config, KmdfHelloWorldEvtDeviceAdd);
-	status = WdfDriverCreate(DriverObject, RegistryPath, WDF_NO_OBJECT_ATTRIBUTES, &config, WDF_NO_HANDLE);
-	return status;
+	return STATUS_SUCCESS;
 }
 
-NTSTATUS KmdfHelloWorldEvtDeviceAdd(_In_ WDFDRIVER Driver, _Inout_ PWDFDEVICE_INIT DeviceInit)
+NTSTATUS KeReadProcessMemory(PEPROCESS Process, PVOID SourceAddress, PVOID TargetAddress, SIZE_T Size)
 {
-	NTSTATUS status;
-	WDFDEVICE hDevice;
-	UNREFERENCED_PARAMETER(Driver);
+	SIZE_T Result;
 
-	KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "KmdfHelloWorld: KmdfHelloWorldEvtDeviceAdd\n"));
-	status = WdfDeviceCreate(&DeviceInit, WDF_NO_OBJECT_ATTRIBUTES, &hDevice);
-	return status;
+	PEPROCESS SourceProcess = Process;
+	PEPROCESS TargetProcess = PsGetCurrentProcess();
+
+	if (NT_SUCCESS(MmCopyVirtualMemory(SourceProcess, SourceAddress, TargetProcess, TargetAddress, Size, KernelMode, &Result)))
+		return STATUS_SUCCESS;
+	else
+		return STATUS_ACCESS_DENIED;
 }
+
+NTSTATUS KeWriteProcessMemory(PEPROCESS Process, PVOID SourceAddress, PVOID TargetAddress, SIZE_T Size)
+{
+	SIZE_T Result;
+
+	PEPROCESS SourceProcess = PsGetCurrentProcess();
+	PEPROCESS TargetProcess = Process;
+
+	if (NT_SUCCESS(MmCopyVirtualMemory(SourceProcess, SourceAddress, TargetProcess, TargetAddress, Size, KernelMode, &Result)))
+		return STATUS_SUCCESS;
+	else
+		return STATUS_ACCESS_DENIED;
+
+}
+
