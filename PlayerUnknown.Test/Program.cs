@@ -2,23 +2,24 @@
 {
     using System;
     using System.Threading;
-    using System.Threading.Tasks;
 
     using PlayerUnknown.Cheats;
-    using PlayerUnknown.Events;
-    using PlayerUnknown.Leaker;
     using PlayerUnknown.Logic.Weapons;
-    using PlayerUnknown.Native;
     using PlayerUnknown.Sniffer;
 
-    using WinApi.Gdi32;
-    using WinApi.User32;
-    using WinApi.Windows;
-
-    using Window = WinApi.Windows.Controls.Window;
-
-    internal class Program
+    public static class Program
     {
+        /// <summary>
+        /// Gets a value indicating whether this instance is checking.
+        /// </summary>
+        public static bool IsChecking
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
@@ -35,7 +36,7 @@
                 PUBG.Attach();
                 PUBG.EnableEvents();
 
-                if (PUBG.IsAttached == false)
+                if (IsChecking && PUBG.IsAttached == false)
                 {
                     Logging.Info(typeof(Program), "Waiting for PUBG to start...");
 
@@ -47,15 +48,14 @@
                     Thread.Sleep(2500);
                 }
 
-                // Program.TestLeaker();
                 // Program.TestSniffer();
                 // Program.TestNoRecoil();
                 // Program.TestFastFire();
-                // Program.TestWindow();
             }
 
             Console.ReadKey(false);
         }
+
 
         /// <summary>
         /// Tests the sniffer.
@@ -68,7 +68,7 @@
             {
                 PubgSniffer.StartCapture();
 
-                // Setup events.
+                // Setup events..
 
                 PubgSniffer.OnPacketCaptured += (Sender, Packet) =>
                 {
@@ -96,32 +96,6 @@
         internal static void TestFastFire()
         {
             FastFire.Run().Wait();
-        }
-
-        /// <summary>
-        /// Tests the leaker.
-        /// </summary>
-        internal static void TestLeaker()
-        {
-            FuckBattlEye.Run("PlayerUnknown.Test.exe", "TslGame");
-        }
-
-        /// <summary>
-        /// Tests the window.
-        /// </summary>
-        internal static void TestWindow()
-        {
-            // Window.SetTitle(PUBG.WindowHandle, "PLAYERUNKNOWN'S HACKEDGROUNDS");
-
-            using (var Overlay = Window.Create<TestWindow>("PubgOverlay", exStyles: WindowExStyles.WS_EX_TOPMOST | WindowExStyles.WS_EX_TRANSPARENT))
-            {
-                Overlay.Show();
-
-                Overlay.SetPosition(PUBG.Window.NormalPosition);
-                Overlay.SetSize(PUBG.Window.NormalPosition.Width, PUBG.Window.NormalPosition.Height);
-
-                int ExitCode = new EventLoop().Run(Overlay);
-            }
         }
     }
 }

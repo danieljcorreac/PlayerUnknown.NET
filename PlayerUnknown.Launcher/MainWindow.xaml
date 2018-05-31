@@ -1,0 +1,34 @@
+﻿<Window x:Class="PlayerUnknown.Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlayerUnknown.Launcher"
+        mc:Ignorable="d"
+        Title="PUBG Launcher" Height="456" Width="799" Background="{x:Null}" Foreground="{x:Null}" WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize" Icon="Images/pubg_logo.png">
+    <Grid>
+        <Grid HorizontalAlignment="Left" Width="792" Background="#FF18181A" Height="308" VerticalAlignment="Top" Margin="1,0,0,0">
+            <Image HorizontalAlignment="Left" Height="150" Margin="318,50,0,0" VerticalAlignment="Top" Width="150" Source="Images/pubg_guard_logo.png"/>
+            <Label Content="ANTI-CHEAT LAUNCH MODE" Margin="0,205,0,0" Foreground="#FFFFC600" Width="792" FontSize="48" FontWeight="Bold" FontFamily="Teko SemiBold" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="119" VerticalAlignment="Bottom" Width="792" Background="#FF262628" Margin="1,0,0,0">
+            <Button Content="SECURITY MODE" HorizontalAlignment="Center" Margin="57,32,419,24" VerticalAlignment="Center" Width="316" Height="63" BorderBrush="#FFCBCBCB" FontFamily="Teko SemiBold" Foreground="White" FontSize="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="OnSecurityMode">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0,6" MappingMode="RelativeToBoundingBox" StartPoint="-2,0">
+                        <GradientStop Color="#FFB4B3B0"/>
+                        <GradientStop Color="#FFFFC600" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button Content="DEVELOPMENT MODE" HorizontalAlignment="Center" Margin="410,32,66,24" VerticalAlignment="Center" Width="316" Height="63" BorderBrush="#FFCBCBCB" FontFamily="Teko SemiBold" Foreground="White" FontSize="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0,6" MappingMode="RelativeToBoundingBox" StartPoint="-2,0">
+                        <GradientStop Color="#FFBBBBBB"/>
+                        <GradientStop Color="#FF686868" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+        </Grid>
+
+    </Grid>
+</Window>
