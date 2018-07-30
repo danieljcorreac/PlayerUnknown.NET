@@ -86,7 +86,19 @@
                             {
                                 await Task.Delay(NoRecoil.Weapon.FireRate);
                             }
+                            else
+                            {
+                                Logging.Warning(typeof(NoRecoil), "FireRate == 0.");
+                            }
                         }
+                        else
+                        {
+                            Logging.Warning(typeof(NoRecoil), "IsRecoilEnabled == false.");
+                        }
+                    }
+                    else
+                    {
+                        Logging.Warning(typeof(NoRecoil), "Weapon == null.");
                     }
                 }
                 else

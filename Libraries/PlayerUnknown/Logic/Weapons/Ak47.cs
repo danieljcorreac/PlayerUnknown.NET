@@ -9,7 +9,7 @@
         {
             get
             {
-                return 100;
+                return 20;
             }
         }
 
@@ -20,7 +20,7 @@
         {
             get
             {
-                return 5;
+                return 4;
             }
         }
 

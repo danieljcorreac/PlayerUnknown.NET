@@ -25,11 +25,11 @@
     <WarningLevel>1</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <FileAlignment>512</FileAlignment>
-    <LangVersion>default</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Builds\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -37,7 +37,7 @@
     <WarningLevel>0</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <FileAlignment>512</FileAlignment>
-    <LangVersion>default</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>PlayerUnknown.Test.Program</StartupObject>
@@ -49,7 +49,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
       <Private>True</Private>
@@ -64,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Hacks\PlayerUnknown.Radar\PlayerUnknown.Radar.csproj">
+      <Project>{977751bf-2218-4254-94cb-32212770fd41}</Project>
+      <Name>PlayerUnknown.Radar</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Libraries\PlayerUnknown.Sniffer\PlayerUnknown.Sniffer.csproj">
       <Project>{DE7821C0-D0D1-40FA-BC2D-F498C4A049A0}</Project>
       <Name>PlayerUnknown.Sniffer</Name>
@@ -74,4 +77,13 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>move "$(TargetDir)*.dll" "$(TargetDir)Library\"
+del "$(TargetDir)*.pdb"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>IF EXIST "$(TargetDir)Library\" RMDIR /S /Q "$(TargetDir)Library\"
+IF EXIST "$(TargetDir)Obfuscated\" RMDIR /S /Q "$(TargetDir)Obfuscated\"
+MKDIR "$(TargetDir)Library\"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

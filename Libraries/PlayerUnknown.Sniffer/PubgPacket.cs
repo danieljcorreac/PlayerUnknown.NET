@@ -24,11 +24,27 @@
         }
 
         /// <summary>
+        /// Gets the hexadecimal representation of the buffer.
+        /// </summary>
+        public string Hexadecimal
+        {
+            get
+            {
+                return BitConverter.ToString(this.Buffer);
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PubgPacket"/> class.
         /// </summary>
         /// <param name="Buffer">The buffer.</param>
         public PubgPacket(byte[] Buffer)
         {
+            if (Buffer == null || Buffer.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(Buffer), "Buffer was either null or empty at PubgPacket(Buffer).");
+            }
+
             this.Buffer = Buffer;
             this.Length = Buffer.Length;
         }
@@ -40,7 +56,25 @@
         /// <param name="Length">The length.</param>
         public PubgPacket(byte[] Buffer, int Length)
         {
-            this.Buffer = Buffer;
+            if (Buffer.Length != Length)
+            {
+                Logging.Warning(typeof(PubgPacket), "Buffer.Length does not match the given length at PubgPacket(Buffer, Length).");
+            }
+
+            if (Buffer.Length > Length)
+            {
+                this.Buffer = new byte[Length];
+                Array.Copy(Buffer, 0, this.Buffer, 0, Length);
+            }
+            else if (Buffer.Length > Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Buffer), "Buffer.Length is inferior to the given length.");
+            }
+            else
+            {
+                this.Buffer = Buffer;
+            }
+
             this.Length = Length;
         }
 

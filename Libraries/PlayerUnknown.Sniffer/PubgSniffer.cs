@@ -56,6 +56,15 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="DateTime"/> at which this instance started sniffing packet.
+        /// </summary>
+        public DateTime StartTime
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Initializes this instance.
         /// </summary>
         public PubgSniffer(bool SavePackets = false)
@@ -80,12 +89,14 @@
                 return false;
             }
 
+            Logging.Info(typeof(PubgSniffer), "Detected " + Devices.Count + " network cards.");
+
             foreach (var Device in Devices)
             {
                 Logging.Info(typeof(PubgSniffer), Device.GetType().Name + ", " + Device.Description +  ".");
             }
 
-            this.Device = (WinPcapDevice) Devices[0];
+            this.Device = (WinPcapDevice) Devices[4];
 
             if (Device.Started == false)
             {
@@ -119,6 +130,7 @@
             }
 
             this.IsCapturing = true;
+            this.StartTime   = DateTime.Now;
 
             this.Device.StartCapture();
         }
@@ -157,6 +169,15 @@
                 return;
             }
 
+            // We want to be sure the packet is a packet we actually want
+
+            Logging.Warning(typeof(PubgSniffer), "LinkLayerType == " + Args.Packet.LinkLayerType.ToString());
+
+            if (Args.Packet.LinkLayerType == LinkLayers.Null)
+            {
+                return; // LinkLayers.Null is not implemented !
+            }
+
             // We want the payload, so we take the last part of the packet
 
             while (UdpPacket.PayloadPacket != null)
@@ -173,7 +194,7 @@
 
             if (this.IsSaving)
             {
-                File.AppendAllText("Logs\\Packets." + DateTime.UtcNow.ToString("MM-dd-yyyy.hh-mm-ss") + ".log", BitConverter.ToString(UdpPacket.PayloadData) + Environment.NewLine);
+                File.AppendAllText("Logs\\Packets." + this.StartTime.ToString("MM-dd-yyyy.hh-mm-ss") + ".log", BitConverter.ToString(UdpPacket.PayloadData) + Environment.NewLine);
             }
         }
 

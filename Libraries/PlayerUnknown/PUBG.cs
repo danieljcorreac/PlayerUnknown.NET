@@ -135,7 +135,7 @@
                 {
                     var Placement = Native.Window.GetWindowPlacement(PUBG._AttachedProcess.MainWindowHandle);
 
-                    if (Placement.ShowCmd == WindowStates.Hide || Placement.ShowCmd == WindowStates.Minimize || Placement.ShowCmd == WindowStates.ForceMinimized)
+                    if (Placement.ShowCmd == WindowStates.ShowMinimized || Placement.ShowCmd == WindowStates.ForceMinimized)
                     {
                         return true;
                     }
@@ -188,7 +188,7 @@
                         return false;
                     }
 
-                    if (Flag == WindowStates.Restore || Flag == WindowStates.Show || Flag == WindowStates.ShowDefault || Flag == WindowStates.ShowNormal)
+                    if (Flag == WindowStates.Restore || Flag == WindowStates.Show || Flag == WindowStates.ShowNormal)
                     {
                         return true;
                     }
@@ -300,7 +300,7 @@
         /// Attaches this instance to <see cref="PUBG"/>.
         /// </summary>
         /// <param name="BattlEyeProtected">If it must be protected or not.</param>
-        public static void Attach(bool BattlEyeProtected = true)
+        public static void Attach(bool BattlEyeProtected = false)
         {
             var Processes = Process.GetProcessesByName(BattlEyeProtected ? "TslGame_BE" : "TslGame");
             var Processus = (Process) null;

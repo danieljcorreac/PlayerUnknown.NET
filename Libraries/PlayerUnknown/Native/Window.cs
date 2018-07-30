@@ -2,6 +2,7 @@
 {
     using System;
     using System.Drawing;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
 
     using Process.NET.Native.Types;
@@ -17,14 +18,20 @@
         /// <param name="Handle">The handle.</param>
         public static WindowPlacement GetWindowPlacement(IntPtr Handle)
         {
-            var Placement = new WindowPlacement();
+            if (Handle == IntPtr.Zero)
+            {
+                throw new ArgumentException("Handle is invalid.", nameof(Handle));
+            }
+
+            var Placement    = new WindowPlacement();
+            Placement.Length = Marshal.SizeOf(Placement);
 
             if (Win32.GetWindowPlacement(Handle, ref Placement))
             {
                 return Placement;
             }
 
-            return Placement;
+            throw new Exception("GetWindowPlacement failed.");
         }
 
         /// <summary>

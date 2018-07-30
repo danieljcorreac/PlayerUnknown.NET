@@ -53,7 +53,7 @@
             out Rectangle       Rectangle
         );
 
-        [DllImport("user32.dll", SetLastError = true)]
+        [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetWindowPlacement(
             IntPtr              Handle,

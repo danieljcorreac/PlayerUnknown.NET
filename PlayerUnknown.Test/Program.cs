@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using PlayerUnknown.Cheats;
     using PlayerUnknown.Logic.Weapons;
@@ -49,13 +50,11 @@
                 }
 
                 // Program.TestSniffer();
-                // Program.TestNoRecoil();
-                // Program.TestFastFire();
+                Program.TestNoRecoil();
             }
 
             Console.ReadKey(false);
         }
-
 
         /// <summary>
         /// Tests the sniffer.

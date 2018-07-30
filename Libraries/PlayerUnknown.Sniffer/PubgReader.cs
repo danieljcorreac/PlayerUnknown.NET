@@ -3,235 +3,194 @@
     using System;
     using System.Text;
 
-    public class PubgReader : IDisposable
+    public class PubgReader
     {
-        protected byte[] Buffer;
+        public readonly StringBuilder BinString;
+        
+        /// <summary>
+        /// Gets the current position of the reader.
+        /// </summary>
+        public int Position
+        {
+            get;
+            set;
+        }
 
         /// <summary>
-        /// Gets the length of the stream.
+        /// Gets the total number of bits.
         /// </summary>
         public int Length
         {
-            get
-            {
-                return this.Buffer.Length;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the offset of the stream.
-        /// </summary>
-        public int Offset
-        {
             get;
-            private set;
         }
 
         /// <summary>
-        /// Gets the count of bytes left.
+        /// Gets the remaining number of bits.
         /// </summary>
-        public int BytesLeft
+        public int Remain
         {
             get
             {
-                return this.Buffer.Length - this.Offset;
+                return this.Length - this.Position;
             }
         }
 
         /// <summary>
-        /// Gets a value indicating if the stream end has been reached.
+        /// Gets a value indicating whether this instance has no bits to read anymore.
         /// </summary>
-        public bool IsAtEnd
+        public bool IsEnd
         {
             get
             {
-                return this.Buffer.Length <= this.Offset;
+                return this.Remain == 0;
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="PubgReader"/> is disposed.
+        /// create a PubgReader
         /// </summary>
-        public bool Disposed
+        /// <param name="Data">data to read</param>
+        public PubgReader(byte[] Data)
         {
-            get;
-            private set;
-        }
+            this.Length    = Data.Length * 8;
+            this.BinString = new StringBuilder(this.Length);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PubgReader"/> class.
-        /// </summary>
-        /// <param name="Size">The size.</param>
-        public PubgReader(int Size)
-        {
-            this.Buffer = new byte[Size];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PubgReader"/> class.
-        /// </summary>
-        /// <param name="Buffer">The buffer.</param>
-        public PubgReader(byte[] Buffer)
-        {
-            this.Buffer = Buffer;
-        }
-
-        /// <summary>
-        /// Reads a element of buffer.
-        /// </summary>
-        private byte Read()
-        {
-            return this.Buffer[this.Offset++];
-        }
-
-        /// <summary>
-        /// Reads a short value.
-        /// </summary>
-        public short ReadShort()
-        {
-            return (short) (this.Read() << 8 | this.Read());
-        }
-
-        /// <summary>
-        /// Reads a ushort value.
-        /// </summary>
-        public ushort ReadUShort()
-        {
-            return (ushort) (this.Read() << 8 | this.Read());
-        }
-
-        /// <summary>
-        /// Reads a int value.
-        /// </summary>
-        public int ReadInt()
-        {
-            return this.Read() << 24 | this.Read() << 16 | this.Read() << 8 | this.Read();
-        }
-
-        /// <summary>
-        /// Reads a int value.
-        /// </summary>
-        public int ReadInt24()
-        {
-            return this.Read() << 16 | this.Read() << 8 | this.Read();
-        }
-
-        /// <summary>
-        /// Reads a uint value.
-        /// </summary>
-        public uint ReadUInt()
-        {
-            return (uint) (this.Read() << 24 | this.Read() << 16 | this.Read() << 8 | this.Read());
-        }
-
-        /// <summary>
-        /// Reads a uint value.
-        /// </summary>
-        public uint ReadUInt24()
-        {
-            return (uint) (this.Read() << 16 | this.Read() << 8 | this.Read());
-        }
-
-        /// <summary>
-        /// Reads a long value.
-        /// </summary>
-        public long ReadLong()
-        {
-            return (long) (this.Read() << 56 | this.Read() << 48 | this.Read() << 40 | this.Read() << 32 | this.Read() << 24 | this.Read() << 16 | this.Read() << 8 | this.Read());
-        }
-
-        /// <summary>
-        /// Reads a ulong value.
-        /// </summary>
-        public ulong ReadULong()
-        {
-            return (ulong) (this.Read() << 56 | this.Read() << 48 | this.Read() << 40 | this.Read() << 32 | this.Read() << 24 | this.Read() << 16 | this.Read() << 8 | this.Read());
-        }
-
-        /// <summary>
-        /// Reads a byte array using the specified length.
-        /// </summary>
-        /// <param name="Length">The length.</param>
-        public byte[] ReadBytes(int Length)
-        {
-            if (Length < 0)
+            for (int i = 0; i < Data.Length; i++)
             {
-                if (Length != -1)
-                {
-                    throw new Exception("Length is invalid at ReadBytes(" + Length + ").");
-                }
-
-                return null;
+                this.BinString.Append(PubgReader.ByteToBinString(Data[i]));
             }
 
-            return this.ReadRange(Length);
+            this.Position = 0;
         }
 
         /// <summary>
-        /// Reads a string value.
+        /// Reads 8 bits at the specified offset, and returns a byte.
         /// </summary>
-        public string ReadString()
+        /// <param name="Offset">The offset.</param>
+        public byte ReadByte(int Offset)
         {
-            int Length = this.ReadInt();
-
-            if (Length < 0)
-            {
-                if (Length != -1)
-                {
-                    throw new Exception("Length is invalid at ReadBytes(" + Length + ").");
-                }
-
-                return null;
-            }
-
-            return Encoding.UTF8.GetString(this.ReadRange(Length));
+            var bin = this.BinString.ToString(Offset, 8);
+            return Convert.ToByte(bin, 2);
         }
 
         /// <summary>
-        /// Reads a range of bytes from the buffer.
+        /// Reads 8 bits, increase the position, and returns a byte.
         /// </summary>
-        private byte[] ReadRange(int Length)
+        public byte ReadByte()
         {
-            if (Length > this.BytesLeft)
-            {
-                throw new Exception("ReadRange(" + Length + "), this.BytesLeft < " + Length + ".");
-            }
+            var Result      = this.ReadByte(this.Position);
+            this.Position  += 8;
 
-            byte[] Bytes = new byte[Length];
-            Array.Copy(this.Buffer, this.Offset, Bytes, 0, Length);
-            this.Offset += Length;
-
-            return Bytes;
+            return Result;
         }
 
         /// <summary>
-        /// Skips some bytes to reach a certain offset.
+        /// Reads x bits at the specified offset, and returns an integer.
         /// </summary>
-        /// <param name="Length">The length.</param>
-        public void SkipBytes(int Length)
+        /// <param name="Offset">The offset.</param>
+        /// <param name="BitLength">The length.</param>
+        public int ReadInt(int Offset, int BitLength)
         {
-            this.Offset += Length;
-
-            if (this.Offset >= this.Length)
-            {
-                this.Offset = this.Length;
-            }
+            var bin = this.BinString.ToString(Offset, BitLength);
+            return Convert.ToInt32(bin, 2);
         }
 
         /// <summary>
-        /// Exécute les tâches définies par l'application associées à
-        /// la libération ou à la redéfinition des ressources non managées.
+        /// Reads x bits and returns an integer.
         /// </summary>
-        public void Dispose()
+        /// <param name="BitLength">The length.</param>
+        public int ReadInt(int BitLength)
         {
-            if (this.Disposed)
+            var Result      = this.ReadInt(this.Position, BitLength);
+            this.Position  += BitLength;
+
+            return Result;
+        }
+
+        /// <summary>
+        /// Reads 1 bit at the specified offset, and returns a boolean.
+        /// </summary>
+        /// <param name="Offset">offset</param>
+        public bool ReadBool(int Offset)
+        {
+            var result = this.ReadInt(Offset, 1);
+            return result != 0;
+        }
+
+        /// <summary>
+        /// Reads 1 bit and returns a boolean.
+        /// </summary>
+        public bool ReadBool()
+        {
+            var Result      = this.ReadBool(this.Position);
+            this.Position  += 1;
+
+            return Result;
+        }
+
+        /// <summary>
+        /// read {bitLength} binary string from offset
+        /// </summary>
+        /// <param name="Offset">offset</param>
+        /// <param name="BitLength">length of binary string</param>
+        /// <returns></returns>
+        public string ReadBinString(int Offset, int BitLength)
+        {
+            return this.BinString.ToString(Offset, BitLength);
+        }
+
+        /// <summary>
+        /// read {bitLength} binary string from Position, and move position with {bitLength}
+        /// </summary>
+        /// <param name="BitLength">length of binary string</param>
+        public string ReadBinString(int BitLength)
+        {
+            var result = this.ReadBinString(this.Position, BitLength);
+            this.Position += BitLength;
+            return result;
+        }
+
+        /// <summary>
+        /// read {bitLength} to char from offset
+        /// </summary>
+        /// <param name="Offset">offset</param>
+        /// <param name="BitLength">number of bit</param>
+        /// <returns></returns>
+        public char ReadChar(int Offset, int BitLength)
+        {
+            var b = this.ReadInt(Offset, BitLength);
+            return Convert.ToChar(b);
+        }
+
+        /// <summary>
+        /// read {bitLength} to char from Position, and move Position with {bitLength}
+        /// </summary>
+        /// <param name="BitLength">number of bit</param>
+        /// <returns></returns>
+        public char ReadChar(int BitLength)
+        {
+            var result = this.ReadChar(this.Position, BitLength);
+            this.Position += BitLength;
+            return result;
+        }
+
+        /// <summary>
+        /// convert byte to 8 bit binary string
+        /// </summary>
+        /// <param name="B">byte value</param>
+        /// <returns>8 bit binary string</returns>
+        public static char[] ByteToBinString(byte B)
+        {
+            var Result    = new char[8];
+
+            for (int i = 0; i < 8; i++)
             {
-                return;
+                var Temp  = B & 128;
+                Result[i] = Temp == 0 ? '0' : '1';
+                B         = (byte)(B << 1);
             }
 
-            this.Buffer     = null;
-            this.Offset     = 0;
-            this.Disposed   = true;
+            return Result;
         }
     }
 }
