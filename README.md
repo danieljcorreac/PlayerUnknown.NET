@@ -28,7 +28,7 @@ namespace PlayerUnknown.Example
 
             if (PUBG.IsAttached == false)
             {
-                Logging.Info(typeof(Program), "Waiting for PUBG to start...");
+                // Waiting for PUBG to start...
 
                 while (PUBG.IsAttached != true)
                 {
