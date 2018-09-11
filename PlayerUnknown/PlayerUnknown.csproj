@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D5C4B791-E097-43C6-8921-048C3E1B7170}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PlayerUnknown</RootNamespace>
+    <AssemblyName>PlayerUnknown</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Builds\Debug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>1</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Builds\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventHandlers.cs" />
+    <Compile Include="Events\Handlers\PubgAttachedEvent.cs" />
+    <Compile Include="Events\Handlers\PubgDetachedEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsMaximizedEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsMinimizedEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsNotOnScreenEvent.cs" />
+    <Compile Include="Events\Handlers\Windows\WindowsOnScreenEvent.cs" />
+    <Compile Include="Exceptions\ProcessNotFoundException.cs" />
+    <None Include="PlayerUnknown.nuspec" />
+    <None Include="Properties\app.config" />
+    <Compile Include="Helpers\Comparers\PathEndingComparer.cs" />
+    <Compile Include="Native\Enums\MouseInputFlags.cs" />
+    <Compile Include="Native\Enums\OpenPermissions.cs" />
+    <Compile Include="Native\Enums\WindowStates.cs" />
+    <Compile Include="Native\Structures\Point.cs" />
+    <Compile Include="Native\Structures\Position.cs" />
+    <Compile Include="Native\Structures\Rectangle.cs" />
+    <Compile Include="Native\Structures\WindowPlacement.cs" />
+    <Compile Include="Native\Win32.cs" />
+    <Compile Include="Native\Window.cs" />
+    <Compile Include="Logging.cs" />
+    <Compile Include="Helpers\Padding.cs" />
+    <Compile Include="Native\Mouse.cs" />
+    <Compile Include="PUBG.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd "$(TargetDir)"
+del "*.pdb"
+del "*.xml"
+"nuget.exe" pack "$(ProjectPath)" -Prop Configuration=$(ConfigurationName)</PostBuildEvent>
+  </PropertyGroup>
+</Project>
